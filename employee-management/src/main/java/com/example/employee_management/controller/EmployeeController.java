@@ -1,7 +1,10 @@
-package com.example.employee_management;
+package com.example.employee_management.controller;
 
 
 import org.springframework.web.bind.annotation.*;
+
+import com.example.employee_management.Repository.EmployeeRepository;
+import com.example.employee_management.entity.Employee;
 
 import java.util.List;
 
