@@ -3,8 +3,8 @@ package com.example.employee_management.controller;
 
 import org.springframework.web.bind.annotation.*;
 
-import com.example.employee_management.Repository.EmployeeRepository;
 import com.example.employee_management.entity.Employee;
+import com.example.employee_management.service.EmployeeService;
 
 import java.util.List;
 
@@ -12,25 +12,25 @@ import java.util.List;
 @RequestMapping("/employees")
 public class EmployeeController {
 
-    private final EmployeeRepository repository;
+    private final EmployeeService service;
 
-    public EmployeeController(EmployeeRepository repository) {
-        this.repository = repository;
+    public EmployeeController(EmployeeService service) {
+        this.service = service;
     }
 
     @PostMapping
     public Employee addEmployee(@RequestBody Employee employee) {
-        return repository.save(employee);
+        return service.addEmployee(employee);
     }
 
     @GetMapping
     public List<Employee> getEmployees() {
-        return repository.findAll();
+        return service.getEmployees();
     }
 
     @GetMapping("/{id}")
     public Employee getEmployee(@PathVariable int id) {
-        return repository.findById(id).orElse(null);
+        return service.getEmployee(id);
     }
 
     @PutMapping("/{id}")
@@ -38,27 +38,12 @@ public class EmployeeController {
             @PathVariable int id,
             @RequestBody Employee employee) {
 
-        Employee oldEmployee =
-                repository.findById(id).orElse(null);
-
-        if (oldEmployee != null) {
-
-            oldEmployee.setName(employee.getName());
-            oldEmployee.setEmail(employee.getEmail());
-            oldEmployee.setDepartment(employee.getDepartment());
-            oldEmployee.setSalary(employee.getSalary());
-
-            return repository.save(oldEmployee);
-        }
-
-        return null;
+        return service.updateEmployee(id, employee);
     }
 
     @DeleteMapping("/{id}")
     public String deleteEmployee(@PathVariable int id) {
-
-        repository.deleteById(id);
-
-        return "Employee deleted successfully";
+        return service.deleteEmployee(id);
     }
-}
+        }
+
